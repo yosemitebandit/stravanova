@@ -1,5 +1,27 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+''' stravanova
+command line utility that takes GPX files and stores some of their attributes 
+in a JSON format:
+
+    $ ./stravanova.py --files mountains.gpx valleys.gpx --output rides.json
+    $ ./stravanova.py --directory /secret/climb/routes/ --output climbs.json
+
+
+the JSON format compresses the info at the expense of being non-standard:
+
+    routes = {
+        'cow-watchin': [
+            [123.456, 789.012, '2012-05-28T03:36:04']
+            , [123.467, 789.023, '2012-05-28T03:36:09']
+        ]
+        , 'quadruple-century': [
+            [345.456, 78.012, '2112-05-28T03:36:04']
+            , [345.467, 78.023, '2112-05-28T03:36:09']
+        ]
+    }
+
+'''
 
 import argparse
 import json
@@ -34,20 +56,6 @@ elif arguments.directory:
     else:
         parser.error('the dir you specified is not actually a directory..')
 
-
-''' store the route data
-strips out all unnecessary info at the expense of being non-standard
-routes = {
-    'cow-watchin': [
-        [123.456, 789.012, '2012-05-28 03:36:04']
-        , [123.467, 789.023, '2012-05-28 03:36:09']
-    ]
-    , 'quadruple-century': [
-        [345.456, 78.012, '2112-05-28 03:36:04']
-        , [345.467, 78.023, '2112-05-28 03:36:09']
-    ]
-}
-'''
 routes = {}
 for gpx_file in files:
     try:
