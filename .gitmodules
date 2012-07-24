@@ -1,0 +1,3 @@
+[submodule "vendor/gmaps"]
+	path = vendor/gmaps
+	url = git://github.com/HPNeo/gmaps.git
