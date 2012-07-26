@@ -52,33 +52,42 @@
     var Route_Player = function(route, map) {
       this.route = route;
       this.map = map
+
+      // draw the first marker
+      this.current_marker = this.map.addMarker({
+        lat: this.route[0][0]
+        , lng: this.route[0][1]
+      });
+
+      this.current_frame = 1;
+    };
+
+    Route_Player.prototype.play = function() {
+      var self = this;
+      this.timeout_id = window.setInterval( function() {
+        self.animate_frame();
+      }, 100);
+    };
+
+    Route_Player.prototype.pause = function() {
+      window.clearTimeout(this.timeout_id);
+    };
+
+    Route_Player.prototype.stop = function() {
+      window.clearTimeout(this.timeout_id);
       this.current_frame = 0;
+    }
 
-      this.play = function() {
-        var self = this;
-        this.timeout_id = window.setInterval( function() {
-          self.animate_frame();
-        }, 100);
-      };
+    Route_Player.prototype.animate_frame = function() {
+      // update position
+      this.current_marker.setPosition(
+        new google.maps.LatLng(
+          this.route[this.current_frame][0]
+          , this.route[this.current_frame][1]
+        )
+      );
 
-      this.pause = function() {
-        window.clearTimeout(this.timeout_id);
-      };
-
-      this.animate_frame = function() {
-        // remove old marker
-        if (this.current_marker) {
-          this.current_marker.setMap(null);
-        }
-
-        this.current_marker = this.map.addMarker({
-          lat: this.route[this.current_frame][0]
-          , lng: this.route[this.current_frame][1]
-        });
-
-        this.current_frame++;
-      };
-
+      this.current_frame++;
     };
 
     var map;
@@ -91,7 +100,7 @@
         , zoom: 11
       });
 
-      $.getJSON('rides.json', function(data) {
+      $.getJSON('test-rides.json', function(data) {
         _.map(data, function(route) {
           var path = _.map(route, function(point) { return [point[0], point[1]] });
 
