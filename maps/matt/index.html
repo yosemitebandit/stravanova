@@ -61,12 +61,6 @@
 
       $.getJSON('../ride-files/matt-rides.json', function(data) {
         _.map(data, function(route) {
-          var path = _.map(route, function(point) { return [point[0], point[1]] });
-
-          map.drawPolyline({
-            path: path
-            , strokeColor: '#1C86FF'
-          });
 
           var player = new Route_Player(route, map);
           player.play();
