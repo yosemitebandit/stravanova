@@ -1,1 +1,1 @@
-../../vendor/gmaps/gmaps.js
+../vendor/gmaps/gmaps.js
