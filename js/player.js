@@ -10,6 +10,15 @@ var Route_Player = function(route, map) {
         lat: this.route[0][0]
         , lng: this.route[0][1]
     });
+
+    // start a polyline of 0 length
+    this.polyline = this.map.drawPolyline({
+        path: [[this.route[0][0], this.route[0][1]]
+            , [this.route[0][0], this.route[0][1]]]
+        , strokeColor: '1c86ff'
+        , strokeOpacity: 0.6
+    });
+
 };
 
 Route_Player.prototype.play = function() {
@@ -31,11 +40,16 @@ Route_Player.prototype.stop = function() {
 Route_Player.prototype.animate_frame = function() {
     this.current_frame++;
 
-    // update position
-    this.current_marker.setPosition(
-        new google.maps.LatLng(
-            this.route[this.current_frame][0]
-            , this.route[this.current_frame][1]
-        )
-    );
+    var latest_position = new google.maps.LatLng(
+        this.route[this.current_frame][0]
+        , this.route[this.current_frame][1]
+    )
+
+    // update position of marker
+    this.current_marker.setPosition(latest_position);
+
+    // extend polyline trace
+    var path = this.polyline.getPath();
+    path.push(latest_position)
+
 };
