@@ -16,8 +16,9 @@
     - API like `$ ./stravanova.py alpine-dam.gpx mt-tam.gpx mt-ham.gpx fun-rides.json`
     - or `$ ./stravanova.py local-climbs-dir/ local-climbs.json`
     - maybe [geojson](http://www.geojson.org/geojson-spec.html)..
+    - bin times so that each route has a point every N seconds
+        - that way the js player will play things at the correct speed
 2. js lib for animating markers along a route
-    - how does this not exist..
 3. custom js for connecting the json and the animator class
 4. play/pause/speedup??
 
