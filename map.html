@@ -28,7 +28,7 @@
         position: absolute;
         top: 53px;
         right: 0px;
-        width: 300px;
+        width: 320px;
         background: white;
         margin: 5px;
         font-family: Arial, sans-serif;
@@ -37,6 +37,15 @@
         border: solid 1px #717B87;
         box-shadow: rgba(0, 0, 0, 0.398438) 0px 2px 4px;
       }
+
+      .close-overlay {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        padding: 5px 10px;
+        cursor: pointer;
+      }
+
 
     </style>
 
@@ -47,11 +56,12 @@
     </div>
 
     <div class='stravanova-overlay' id='stravanova-overlay'>
-      <p>'space' to play/pause</p>
-      <p>visit <a href="http://yosemitebandit.github.com/stravanova">yosemitebandit.github.com/stravanova</a> for more maps</p>
-      <p>send your .gpx files to stravanova@gmail.com to submit your own gpx data
+      <p><code>spacebar</code> to play and pause things</p>
+      <p>send your <code>.gpx</code> files to <code>stravanova@gmail.com</code> for your very own map</p>
+      <p>visit <a href="http://yosemitebandit.github.com/stravanova">yosemitebandit.github.com/stravanova</a> for more</p>
       <p>and keep riding.</p>
-      <p>built by <a href="http://yosemitebandit.com/projects">by Matt</a> in SF<p>
+
+      <span class='close-overlay'><code>x</code></span>
     </div>
 
   </body>
@@ -78,8 +88,8 @@
       $('.stravanova-overlay').fadeOut(800);
     }, 10000);
 
-    $('.stravanova-overlay').click(function() {
-      $(this).fadeOut(100);
+    $('.close-overlay').click(function() {
+      $('.stravanova-overlay').fadeOut(100);
     });
 
     var map;
