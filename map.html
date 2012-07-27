@@ -38,42 +38,6 @@
         box-shadow: rgba(0, 0, 0, 0.398438) 0px 2px 4px;
       }
 
-      .thought-bubble {
-        position: absolute;
-        background: white;
-        border: solid 1px #717B87;
-        box-shadow: rgba(0, 0, 0, 0.398438) 0px 2px 4px;
-
-        /* border-radius should technically be double the width/height to make a circle
-        but making it larger seems to work too..
-        and lets me put it in the class rather than each individual bubble..
-        */
-        -moz-border-radius: 50px;
-        -webkit-border-radius: 50px;
-        border-radius: 50px;
-      }
-
-      #thought-bubble-uno {
-        width: 10px;
-        height: 10px;
-        top: 9px;
-        right: 210px;
-      }
-
-      #thought-bubble-dos {
-        width: 13px;
-        height: 13px;
-        top: 16px;
-        right: 240px;
-      }
-
-      #thought-bubble-tres {
-        width: 16px;
-        height: 16px;
-        top: 36px;
-        right: 269px;
-      }
-
     </style>
 
   </head>
@@ -81,10 +45,6 @@
   <body>
     <div id='map'>
     </div>
-
-    <div id='thought-bubble-uno' class='thought-bubble stravanova-overlay'> </div>
-    <div id='thought-bubble-dos' class='thought-bubble stravanova-overlay'> </div>
-    <div id='thought-bubble-tres' class='thought-bubble stravanova-overlay'> </div>
 
     <div class='stravanova-overlay' id='stravanova-overlay'>
       <p>'space' to play/pause</p>
@@ -119,8 +79,7 @@
     }, 10000);
 
     $('.stravanova-overlay').click(function() {
-      // can't use this or each bubble becomes a target too
-      $('.stravanova-overlay').hide();
+      $(this).hide();
     });
 
     var map;
