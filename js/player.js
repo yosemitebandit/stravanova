@@ -92,11 +92,3 @@ Route_Player.prototype.animate_frame = function() {
         path.push(latest_position);
     }
 };
-
-// shortcuts for play/pause
-Mousetrap.bind(['p', 'space'], function() {
-    for (var i in route_players) {
-        route_players[i].play_pause();
-    }
-});
-

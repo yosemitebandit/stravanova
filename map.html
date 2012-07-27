@@ -24,7 +24,7 @@
         z-index: 0;
       }
 
-      #stravanova-overlay {
+      #help-overlay {
         position: absolute;
         top: 53px;
         right: 0px;
@@ -46,16 +46,13 @@
         cursor: pointer;
       }
 
-
     </style>
-
   </head>
 
   <body>
-    <div id='map'>
-    </div>
+    <div id='map'> </div>
 
-    <div class='stravanova-overlay' id='stravanova-overlay'>
+    <div class='help-overlay' id='help-overlay'>
       <p><code>spacebar</code> to play and pause things</p>
       <p>send your <code>.gpx</code> files to <code>stravanova@gmail.com</code> for your very own map</p>
       <p>visit <a href="http://yosemitebandit.github.com/stravanova">yosemitebandit.github.com/stravanova</a> for more</p>
@@ -81,17 +78,9 @@
   <script type="text/javascript" src="js/gmaps.js"></script>
   <script type="text/javascript" src="js/mousetrap.min.js"></script>
   <script type="text/javascript" src="js/player.js"></script>
+  <script type="text/javascript" src="js/controls.js"></script>
 
   <script>
-
-    var overlay_hide_timeout = window.setTimeout( function() {
-      $('.stravanova-overlay').fadeOut(800);
-    }, 10000);
-
-    $('.close-overlay').click(function() {
-      $('.stravanova-overlay').fadeOut(100);
-    });
-
     var map;
 
     $(function() {
@@ -100,15 +89,6 @@
         , lat: 37.90625
         , lng: -122.45464
         , zoom: 11
-      });
-
-      $.getJSON('ride-files/test-rides.json', function(data) {
-        _.map(data, function(route) {
-
-          var player = new Route_Player(route, map);
-          player.play();
-
-        });
       });
 
       map.addControl({
@@ -126,12 +106,28 @@
             window.clearTimeout(overlay_hide_timeout);
 
             // show/hide the div
-            $('.stravanova-overlay').fadeToggle(100);
+            $('.help-overlay').fadeToggle(100);
           }
         }
       });
 
-    });
-  </script>
+      $('.close-overlay').click(function() {
+        $('.help-overlay').fadeOut(100);
+      });
 
+      var overlay_hide_timeout = window.setTimeout( function() {
+        $('.help-overlay').fadeOut(800);
+      }, 10000);
+
+      // load the ride data
+      $.getJSON('ride-files/test-rides.json', function(data) {
+        _.map(data, function(route) {
+          var player = new Route_Player(route, map);
+          player.play();
+        });
+      });
+
+    });
+
+  </script>
 </html>
