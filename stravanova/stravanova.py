@@ -34,6 +34,8 @@ class Condenser():
         self.filenames = [os.path.basename(f).split('.')[0] 
                 for f in self.file_paths]
 
-        self.parsed_data = {}
+        parsed_data = {}
         for filename in self.filenames:
-            self.parsed_data[filename] = []
+            parsed_data[filename] = []
+
+        return parsed_data

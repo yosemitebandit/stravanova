@@ -14,10 +14,10 @@ class ParsingTest(unittest.TestCase):
         pass
 
     def test_parsing_result_type(self):
-        self.c.parse()
-        assert type(self.c.parsed_data) is dict
+        result = self.c.parse()
+        assert type(result) is dict
 
     def test_parsing_result_keys(self):
-        self.c.parse()
+        result = self.c.parse()
         assert (set(['richmond-jaunt', 'caltrain-expedition']) == 
-                set(self.c.parsed_data.keys()))
+                set(result.keys()))
