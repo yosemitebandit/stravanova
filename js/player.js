@@ -9,6 +9,7 @@ var Route_Player = function(route, map) {
     this.route = route;
     this.map = map
     this.current_frame = 0;
+    this.total_frames = route.length;
 
     // draw the first marker
     this.current_marker = this.map.addMarker({
@@ -20,7 +21,7 @@ var Route_Player = function(route, map) {
     this.polyline = this.map.drawPolyline({
         path: [[this.route[0][0], this.route[0][1]]
             , [this.route[0][0], this.route[0][1]]]
-        , strokeColor: '1c86ff'
+        , strokeColor: '#1c86ff'
         , strokeOpacity: 0.6
     });
 
@@ -31,6 +32,11 @@ var Route_Player = function(route, map) {
 
 Route_Player.prototype.play = function() {
     this.is_playing = true;
+
+    // reset the path if player was stopped at the last frame
+    if (this.is_finished) {
+        this.polyline.setMap(null);
+    }
 
     var self = this;
     // should change to timeout
@@ -53,23 +59,29 @@ Route_Player.prototype.play_pause = function() {
 Route_Player.prototype.stop = function() {
     window.clearTimeout(this.timeout_id);
     this.current_frame = 0;
+    this.is_finished = true;
 }
 
 Route_Player.prototype.animate_frame = function() {
     this.current_frame++;
 
-    var latest_position = new google.maps.LatLng(
-        this.route[this.current_frame][0]
-        , this.route[this.current_frame][1]
-    )
+    // check if we're at the end of the reel, as it were
+    if (this.current_frame >= this.total_frames) {
+        this.stop();
 
-    // update position of marker
-    this.current_marker.setPosition(latest_position);
+    } else {
+        var latest_position = new google.maps.LatLng(
+            this.route[this.current_frame][0]
+            , this.route[this.current_frame][1]
+        )
 
-    // extend polyline trace
-    var path = this.polyline.getPath();
-    path.push(latest_position);
+        // update position of marker
+        this.current_marker.setPosition(latest_position);
 
+        // extend polyline trace
+        var path = this.polyline.getPath();
+        path.push(latest_position);
+    }
 };
 
 // shortcuts for play/pause
