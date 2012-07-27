@@ -1,3 +1,6 @@
 [submodule "vendor/gmaps"]
 	path = vendor/gmaps
 	url = git://github.com/HPNeo/gmaps.git
+[submodule "vendor/mousetrap"]
+	path = vendor/mousetrap
+	url = git://github.com/ccampbell/mousetrap.git
