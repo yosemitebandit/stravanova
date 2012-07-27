@@ -35,7 +35,14 @@ class Condenser():
                 for f in self.file_paths]
 
         parsed_data = {}
-        for filename in self.filenames:
-            parsed_data[filename] = []
+        for path in self.file_paths:
+            gpx = gpxpy.parse(open(path, 'r'))
+
+            filename = os.path.basename(path).split('.')[0]
+
+            for track in gpx.tracks:
+                for segment in track.segments:
+                    parsed_data[filename] = [[p.latitude, p.longitude] 
+                            for p in segment.points]
 
         return parsed_data
