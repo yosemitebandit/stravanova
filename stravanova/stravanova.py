@@ -27,9 +27,14 @@ class Condenser():
     '''
     def __init__(self, gpx_paths):
         self.file_paths = gpx_paths
-        self.parsed_data = None
+        self.default_lat_lon_precision = 5
+        self.default_time_binning = False
 
-    def parse(self, lat_lon_precision=5, time_binning=False):
+    def parse(self, **kwargs):
+        lat_lon_precision = kwargs.pop('lat_lon_precision', 
+                self.default_lat_lon_precision)
+        time_binning = kwargs.pop('time_binning',
+                self.default_time_binning)
 
         self.filenames = [os.path.basename(f).split('.')[0] 
                 for f in self.file_paths]
@@ -42,7 +47,9 @@ class Condenser():
 
             for track in gpx.tracks:
                 for segment in track.segments:
-                    parsed_data[filename] = [[p.latitude, p.longitude] 
-                            for p in segment.points]
+                    parsed_data[filename] = [
+                        [round(p.latitude, lat_lon_precision), 
+                        round(p.longitude, lat_lon_precision)] 
+                        for p in segment.points]
 
         return parsed_data

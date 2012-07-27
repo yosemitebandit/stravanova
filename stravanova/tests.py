@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
+import decimal
 import os
 import unittest
 
@@ -36,7 +37,27 @@ class ParsingTest(unittest.TestCase):
 
             for track in gpx.tracks:
                 for segment in track.segments:
-                    gpxpy_result[filename] = [[p.latitude, p.longitude] 
-                            for p in segment.points]
+                    gpxpy_result[filename] = [
+                        [round(p.latitude, self.c.default_lat_lon_precision), 
+                        round(p.longitude, self.c.default_lat_lon_precision)] 
+                        for p in segment.points]
 
         assert result == gpxpy_result
+
+    def test_default_latlon_precision(self):
+        result = self.c.parse()
+        for route in result:
+            for point in result[route]:
+                for number in point:
+                    d = decimal.Decimal(str(number))
+                    assert (abs(d.as_tuple().exponent) 
+                            <= self.c.default_lat_lon_precision)
+
+    def test_specified_latlon_precision(self):
+        precision_limit = 6 
+        result = self.c.parse(lat_lon_precision=precision_limit)
+        for route in result:
+            for point in result[route]:
+                for number in point:
+                    d = decimal.Decimal(str(number))
+                    assert abs(d.as_tuple().exponent) <= precision_limit
