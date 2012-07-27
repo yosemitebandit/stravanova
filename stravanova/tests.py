@@ -15,6 +15,8 @@ import gpxpy
 import stravanova
 
 class ParsingTest(unittest.TestCase):
+    ''' basic parsing of GPX files into one JSON file
+    '''
     def setUp(self):
         self.gpx_paths = ['fixtures/richmond-jaunt.gpx',
                 'fixtures/caltrain-expedition.gpx']
@@ -50,6 +52,8 @@ class ParsingTest(unittest.TestCase):
 
 
 class LatLonPrecisionTest(unittest.TestCase):
+    ''' limit the number of decimal places stored for each point
+    '''
     def setUp(self):
         self.gpx_paths = ['fixtures/richmond-jaunt.gpx',
                 'fixtures/caltrain-expedition.gpx']
@@ -75,3 +79,16 @@ class LatLonPrecisionTest(unittest.TestCase):
                 for number in point:
                     d = decimal.Decimal(str(number))
                     assert abs(d.as_tuple().exponent) <= precision_limit
+
+
+class TimeBinningTest(unittest.TestCase):
+    ''' bin the data such that recordings occur every N seconds
+    interpolate when neccessary to create that point
+    '''
+    def setUp(self):
+        self.gpx_paths = ['fixtures/richmond-jaunt.gpx',
+                'fixtures/caltrain-expedition.gpx']
+        self.c = stravanova.Condenser(self.gpx_paths)
+
+    def test_default_time_binning(self):
+        pass
