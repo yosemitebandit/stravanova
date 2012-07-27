@@ -1,5 +1,12 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
+''' testing parsing
+metadata capture
+lat/lon precision limits
+time binning
+point limitation
+'''
+
 import decimal
 import os
 import unittest
@@ -12,9 +19,6 @@ class ParsingTest(unittest.TestCase):
         self.gpx_paths = ['fixtures/richmond-jaunt.gpx',
                 'fixtures/caltrain-expedition.gpx']
         self.c = stravanova.Condenser(self.gpx_paths)
-
-    def tearDown(self):
-        pass
 
     def test_parsing_result_type(self):
         result = self.c.parse()
@@ -44,11 +48,21 @@ class ParsingTest(unittest.TestCase):
 
         assert result == gpxpy_result
 
+
+class LatLonPrecisionTest(unittest.TestCase):
+    def setUp(self):
+        self.gpx_paths = ['fixtures/richmond-jaunt.gpx',
+                'fixtures/caltrain-expedition.gpx']
+        self.c = stravanova.Condenser(self.gpx_paths)
+
     def test_default_latlon_precision(self):
         result = self.c.parse()
         for route in result:
             for point in result[route]:
                 for number in point:
+                    ''' this is a trick to get the number of places
+                    after the decimal point
+                    '''
                     d = decimal.Decimal(str(number))
                     assert (abs(d.as_tuple().exponent) 
                             <= self.c.default_lat_lon_precision)
