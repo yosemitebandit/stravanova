@@ -79,7 +79,7 @@
     }, 10000);
 
     $('.stravanova-overlay').click(function() {
-      $(this).hide();
+      $(this).fadeOut(100);
     });
 
     var map;
@@ -116,7 +116,7 @@
             window.clearTimeout(overlay_hide_timeout);
 
             // show/hide the div
-            $('.stravanova-overlay').toggle();
+            $('.stravanova-overlay').fadeToggle(100);
           }
         }
       });
