@@ -29,3 +29,9 @@
 [Flushtracker](http://www.flushtracker.com/) (hah)
 
 [js+GPX](https://github.com/tkafka/Javascript-GPX-track-viewer)
+
+
+### testing
+
+    (venv) $ cd stravanova
+    (venv) $ nosetests
