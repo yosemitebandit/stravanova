@@ -47,10 +47,35 @@ Route_Player.prototype.play = function() {
         this.is_finished = false;
     }
 
+    this.animate_frame();
+};
+
+Route_Player.prototype.animate_frame = function() {
     var self = this;
-    // should change to timeout
-    this.timeout_id = window.setInterval( function() {
-        self.animate_frame();
+
+    this.timeout_id = window.setTimeout( function() {
+        self.current_frame++;
+
+        // check if we're at the end of the reel, as it were
+        if (self.current_frame >= self.total_frames) {
+            self.stop();
+
+        } else {
+            var latest_position = new google.maps.LatLng(
+                self.route[self.current_frame][0]
+                , self.route[self.current_frame][1]
+            )
+
+            // update position of marker
+            self.current_marker.setPosition(latest_position);
+
+            // extend polyline trace
+            var path = self.polyline.getPath();
+            path.push(latest_position);
+
+            self.animate_frame();
+        }
+
     }, 100);
 };
 
@@ -70,25 +95,3 @@ Route_Player.prototype.stop = function() {
     this.current_frame = 0;
     this.is_finished = true;
 }
-
-Route_Player.prototype.animate_frame = function() {
-    this.current_frame++;
-
-    // check if we're at the end of the reel, as it were
-    if (this.current_frame >= this.total_frames) {
-        this.stop();
-
-    } else {
-        var latest_position = new google.maps.LatLng(
-            this.route[this.current_frame][0]
-            , this.route[this.current_frame][1]
-        )
-
-        // update position of marker
-        this.current_marker.setPosition(latest_position);
-
-        // extend polyline trace
-        var path = this.polyline.getPath();
-        path.push(latest_position);
-    }
-};
