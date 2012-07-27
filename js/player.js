@@ -36,6 +36,15 @@ Route_Player.prototype.play = function() {
     // reset the path if player was stopped at the last frame
     if (this.is_finished) {
         this.polyline.setMap(null);
+
+        this.polyline = this.map.drawPolyline({
+            path: [[this.route[0][0], this.route[0][1]]
+                , [this.route[0][0], this.route[0][1]]]
+            , strokeColor: '#1c86ff'
+            , strokeOpacity: 0.6
+        });
+
+        this.is_finished = false;
     }
 
     var self = this;
