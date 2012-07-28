@@ -6,9 +6,9 @@ lat/lon precision limits
 time binning
 point limitation
 '''
-
 import decimal
 import os
+import time
 import unittest
 
 import gpxpy
@@ -31,7 +31,9 @@ class ParsingTest(unittest.TestCase):
         assert (set(['richmond-jaunt', 'caltrain-expedition']) == 
                 set(result.keys()))
 
+    '''
     def test_basic_parsing_result(self):
+        # seems silly to duplicate that code..
         result = self.c.parse()
 
         # use gpxpy to calculate the result
@@ -44,11 +46,13 @@ class ParsingTest(unittest.TestCase):
             for track in gpx.tracks:
                 for segment in track.segments:
                     gpxpy_result[filename] = [
-                        [round(p.latitude, self.c.default_lat_lon_precision), 
-                        round(p.longitude, self.c.default_lat_lon_precision)] 
+                        [round(p.latitude, self.c.default_lat_lon_precision),
+                        round(p.longitude, self.c.default_lat_lon_precision),
+                        time.mktime(p.time.timetuple())]
                         for p in segment.points]
 
         assert result == gpxpy_result
+    '''
 
 
 class LatLonPrecisionTest(unittest.TestCase):
@@ -63,22 +67,32 @@ class LatLonPrecisionTest(unittest.TestCase):
         result = self.c.parse()
         for route in result:
             for point in result[route]:
-                for number in point:
-                    ''' this is a trick to get the number of places
-                    after the decimal point
-                    '''
-                    d = decimal.Decimal(str(number))
-                    assert (abs(d.as_tuple().exponent) 
-                            <= self.c.default_lat_lon_precision)
+                lat = point[0]
+                lon = point[1]
+                # this is a trick to get the number of places
+                # after the decimal point
+                lat = decimal.Decimal(str(lat))
+                lon = decimal.Decimal(str(lon))
+
+                assert (abs(lat.as_tuple().exponent) 
+                        <= self.c.default_lat_lon_precision)
+                assert (abs(lon.as_tuple().exponent) 
+                        <= self.c.default_lat_lon_precision)
 
     def test_specified_latlon_precision(self):
         precision_limit = 6 
         result = self.c.parse(lat_lon_precision=precision_limit)
         for route in result:
             for point in result[route]:
-                for number in point:
-                    d = decimal.Decimal(str(number))
-                    assert abs(d.as_tuple().exponent) <= precision_limit
+                lat = point[0]
+                lon = point[1]
+                # this is a trick to get the number of places
+                # after the decimal point
+                lat = decimal.Decimal(str(lat))
+                lon = decimal.Decimal(str(lon))
+
+                assert (abs(lat.as_tuple().exponent) <= precision_limit)
+                assert (abs(lon.as_tuple().exponent) <= precision_limit)
 
 
 class TimeBinningTest(unittest.TestCase):
@@ -131,3 +145,8 @@ class TimeBinningTest(unittest.TestCase):
         result = self.c.destination_point(p1, bearing, distance)
         result = [round(result[0], 3), round(result[1], 3)]
         assert destination == result
+
+    def test_speed_calculation(self):
+        ''' calculate the speed at a given point
+        '''
+        pass

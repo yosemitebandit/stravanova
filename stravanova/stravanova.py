@@ -2,22 +2,23 @@
 ''' stravanova
 taking GPX files and storing some of their attributes as JSON
 the JSON format compresses the info at the expense of being non-standard:
+[lat, lon, timestamp (epoch, UTC), speed (m/s)]
 
     routes = {
         'cow-watchin': [
-            [123.456, 789.012, '2012-05-28T03:36:04']
-            , [123.467, 789.023, '2012-05-28T03:36:09']
+            [123.456, 789.012, 1343461324, 4.523]
+            , [123.467, 789.023, 1343461324, 2.160]
         ]
         , 'quadruple-century': [
-            [345.456, 78.012, '2112-05-28T03:36:04']
-            , [345.467, 78.023, '2112-05-28T03:36:09']
+            [345.456, 78.012, 1343464324, 4.523]
+            , [345.467, 78.023, 1343463324, 2.160]
         ]
     }
 
 '''
-import json
 from math import radians, cos, sin, asin, sqrt, atan2, pi
 import os
+import time
 
 import gpxpy
 
@@ -40,21 +41,56 @@ class Condenser():
         self.filenames = [os.path.basename(f).split('.')[0] 
                 for f in self.file_paths]
 
-        parsed_data = {}
+        point_data = {}
         for path in self.file_paths:
             gpx = gpxpy.parse(open(path, 'r'))
 
             filename = os.path.basename(path).split('.')[0]
 
+            # extract the points
             for track in gpx.tracks:
                 for segment in track.segments:
-                    parsed_data[filename] = [
-                        [round(p.latitude, lat_lon_precision), 
-                        round(p.longitude, lat_lon_precision)] 
-                        for p in segment.points]
+                    point_data[filename] = [p for p in segment.points]
+
+        # calculate the speeds
+        parsed_data = {}
+        for filename in point_data:
+            path = []
+            for p in point_data[filename]:
+                lat = p.latitude
+                lon = p.longitude
+                timestamp = time.mktime(p.time.timetuple())
+
+                # calculate speeds
+                if not path:
+                    # append the firstk
+                    path.append([round(lat, lat_lon_precision),
+                        round(lon, lat_lon_precision),
+                        timestamp,
+                        None])
+                    continue
+
+                # grab the previous point
+                p = path[-1]
+                # find the distance
+                distance = self._haversine_distance([p[0], p[1]], [lat, lon])
+
+                # calculate the time difference
+                time_delta = timestamp - p[2]
+                if time_delta <= 1:
+                    # don't append, likely haven't moved
+                    continue
+
+                path.append([round(lat, lat_lon_precision),
+                    round(lon, lat_lon_precision),
+                    timestamp,
+                    round(float(distance)/time_delta, 2)])
+
+            parsed_data[filename] = path
 
         return parsed_data
 
+    
     def _bearing(self, point_a, point_b):
         ''' calculate bearing between two points
         points are packed (lat, lon)
