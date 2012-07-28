@@ -10,6 +10,7 @@ var Route_Player = function(route, map) {
     this.map = map
     this.current_frame = 0;
     this.total_frames = route.length;
+    this.step_time = 100;
 
     // draw the first marker
     this.current_marker = this.map.addMarker({
@@ -76,7 +77,7 @@ Route_Player.prototype.animate_frame = function() {
             self.animate_frame();
         }
 
-    }, 100);
+    }, this.step_time);
 };
 
 Route_Player.prototype.play_pause = function() {
