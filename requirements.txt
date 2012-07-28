@@ -1,3 +1,4 @@
 gpxpy==0.7.0
 nose==1.1.2
+numpy==1.6.2
 wsgiref==0.1.2

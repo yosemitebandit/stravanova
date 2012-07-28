@@ -21,16 +21,17 @@ import os
 import time
 
 import gpxpy
+import numpy
 
 
 class Condenser():
     ''' saving gpx files as json
     strips out all but latitude, longitude and time
     '''
-    def __init__(self, gpx_paths):
+    def __init__(self, gpx_paths, binning=False):
         self.file_paths = gpx_paths
         self.default_lat_lon_precision = 5
-        self.default_time_binning = False
+        self.default_time_binning = binning
 
     def parse(self, **kwargs):
         lat_lon_precision = kwargs.pop('lat_lon_precision', 
@@ -80,7 +81,49 @@ class Condenser():
                     timestamp,
                     speed])
 
-            parsed_data[filename] = path
+            if time_binning:
+                print 'time binning..'
+                # create a point for every N seconds
+                N = 4
+                # initialize the path with the first point
+                binned_path = [[path[0][0], path[0][1]]]
+                # array of all timestamps
+                timestamps = [p[2] for p in path]
+
+                # start the clock with the first timestamp
+                tick = timestamps[0]
+                while tick <= timestamps[-1]:
+                    tick += N
+                    index = numpy.searchsorted(timestamps, tick)
+
+                    if index >= len(path):
+                        break
+
+                    # get previous and next points around this tick value
+                    pp = path[index - 1]
+                    np = path[index]
+
+                    # find the bearing and distance
+                    bearing = self._bearing([pp[0], pp[1]], [np[0], np[1]])
+                    speed = self._speed(pp, np)
+                    distance = speed * float(N)
+
+                    # generate a point based on the average bearing and speed
+                    # 'origin' set to the previously calculated point
+                    # traveling N seconds from that point
+                    binned_path.append(self.destination_point(
+                        [binned_path[-1][0], binned_path[-1][1]], bearing,
+                        distance))
+
+                    print tick
+
+                # strip all but lat/lon info
+                parsed_data[filename] = [[p[0], p[1]] for p in binned_path]
+
+            else:
+                # not time-binning
+                parsed_data[filename] = [[p[0], p[1]] for p in path]
+
         return parsed_data
 
     def _speed(self, a, b):
