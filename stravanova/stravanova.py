@@ -78,6 +78,7 @@ class Condenser():
         should maybe consider law of cosines for small distances:
         http://gis.stackexchange.com/questions/4906
         '''
+        R = 6371  # earth radius in km
         # unpack
         lat_a, lon_a = point_a
         lat_b, lon_b = point_b
@@ -91,4 +92,28 @@ class Condenser():
         a = sin(lat_delta/2)**2 + cos(lat_a) * cos(lat_b) * sin(lon_delta/2)**2
 
         # return meters
-        return 1000 * 6371 * 2 * asin(sqrt(a))
+        return 1000 * R * 2 * asin(sqrt(a))
+
+    def destination_point(self, origin, bearing, distance):
+        '''
+        origin is [lat, lon] in decimal degrees
+        bearing in degrees
+        distance given in meters
+        returns point that's a distance from an origin point at a bearing
+        '''
+        # convert
+        distance = distance/1000.
+        bearing = radians(bearing)
+        origin = map(radians, origin)
+        R = 6371  # earth radius in km
+
+        # calculate
+        lat_dest = (asin(sin(origin[0])*cos(distance/R)
+            + cos(origin[0])*sin(distance/R)*cos(bearing)))
+        lon_dest = (origin[1]
+                + atan2(sin(bearing) * sin(distance/R) * cos(origin[0]),
+                cos(distance/R) - sin(origin[0]) * sin(lat_dest)))
+
+        # convert back to decimal degrees
+        return [180/pi * lat_dest, 180/pi * lon_dest]
+

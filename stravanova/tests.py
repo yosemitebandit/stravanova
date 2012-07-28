@@ -118,3 +118,16 @@ class TimeBinningTest(unittest.TestCase):
         p4 = [37.82064132128241, -122.47896552085876]
         assert 11644680 == round(self.c._haversine_distance(p1, p2), -1)
         assert 9.47 == round(self.c._haversine_distance(p3, p4), 2)
+
+    def test_destination_point_calculation(self):
+        ''' get coordinates of point given start point, bearing and a distance
+        'true' values from: http://www.movable-type.co.uk/scripts/latlong.html
+        '''
+        p1 = [33.33, -88.88]
+        bearing = -123.456
+        distance = 12300  # meters
+        destination = [33.269, -88.990]
+
+        result = self.c.destination_point(p1, bearing, distance)
+        result = [round(result[0], 3), round(result[1], 3)]
+        assert destination == result
