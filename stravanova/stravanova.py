@@ -52,7 +52,6 @@ class Condenser():
                 for segment in track.segments:
                     point_data[filename] = [p for p in segment.points]
 
-        # calculate the speeds
         parsed_data = {}
         for filename in point_data:
             path = []
@@ -63,37 +62,38 @@ class Condenser():
 
                 # calculate speeds
                 if not path:
-                    # append the firstk
+                    # append the first point
                     path.append([round(lat, lat_lon_precision),
                         round(lon, lat_lon_precision),
                         timestamp,
                         None])
                     continue
-
                 # grab the previous point
-                h = path[-1]
-                # find the distance
-                distance = self._haversine_distance([h[0], h[1]], [lat, lon])
-
-                # calculate the time difference
-                time_delta = timestamp - h[2]
-                if time_delta <= 1:
-                    # don't append, likely haven't moved
+                previous = path[-1]
+                speed = self._speed(previous, [lat, lon, timestamp])
+                if not speed:
                     continue
 
+                # inject the calculated speed
                 path.append([round(lat, lat_lon_precision),
                     round(lon, lat_lon_precision),
                     timestamp,
-                    round(float(distance)/time_delta, 2)])
+                    speed])
 
             parsed_data[filename] = path
-
         return parsed_data
 
-    def _speed(self, point_a, point_b):
+    def _speed(self, a, b):
         ''' calculates speed between two points
         '''
-        pass
+        # find the distance
+        distance = self._haversine_distance([a[0], a[1]], [b[0], b[1]])
+        # calculate the time difference
+        time_delta = b[2] - a[2]
+        if time_delta <= 1:
+            # haven't moved
+            return None
+        return round(float(distance) / time_delta, 2)
     
     def _bearing(self, point_a, point_b):
         ''' calculate bearing between two points
