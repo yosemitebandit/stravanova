@@ -83,7 +83,7 @@ class Condenser():
 
             if time_binning:
                 # create a point for every N seconds
-                N = 4
+                N = 1
                 # initialize the path with the first point
                 binned_path = [[path[0][0], path[0][1]]]
                 # array of all timestamps
