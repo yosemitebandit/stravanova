@@ -82,7 +82,6 @@ class Condenser():
                     speed])
 
             if time_binning:
-                print 'time binning..'
                 # create a point for every N seconds
                 N = 4
                 # initialize the path with the first point
@@ -114,8 +113,6 @@ class Condenser():
                     binned_path.append(self.destination_point(
                         [binned_path[-1][0], binned_path[-1][1]], bearing,
                         distance))
-
-                    print tick
 
                 # strip all but lat/lon info
                 parsed_data[filename] = [[p[0], p[1]] for p in binned_path]
