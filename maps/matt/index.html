@@ -79,7 +79,6 @@
   <script type="text/javascript" src="https://raw.github.com/HPNeo/gmaps/master/gmaps.js"></script>
   <script type="text/javascript" src="https://raw.github.com/ccampbell/mousetrap/master/mousetrap.min.js"></script>
   <script type="text/javascript" src="https://raw.github.com/yosemitebandit/stravanova/master/js/player.js"></script>
-  <script type="text/javascript" src="https://raw.github.com/yosemitebandit/stravanova/master/js/controls.js"></script>
 
   <script>
     var map;
@@ -92,17 +91,19 @@
         , zoom: 11
       });
 
+      // start the players
       $.getJSON('../ride-files/matt-rides.json', function(data) {
         _.map(data, function(route) {
-
           var player = new Route_Player(route, map);
           player.play();
-
         });
       });
 
     });
 
   </script>
+
+  <!-- putting this down here to make sure map is initialized..lame -->
+  <script type="text/javascript" src="https://raw.github.com/yosemitebandit/stravanova/master/js/controls.js"></script>
 
 </html>
