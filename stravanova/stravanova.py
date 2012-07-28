@@ -71,12 +71,12 @@ class Condenser():
                     continue
 
                 # grab the previous point
-                p = path[-1]
+                h = path[-1]
                 # find the distance
-                distance = self._haversine_distance([p[0], p[1]], [lat, lon])
+                distance = self._haversine_distance([h[0], h[1]], [lat, lon])
 
                 # calculate the time difference
-                time_delta = timestamp - p[2]
+                time_delta = timestamp - h[2]
                 if time_delta <= 1:
                     # don't append, likely haven't moved
                     continue
@@ -90,6 +90,10 @@ class Condenser():
 
         return parsed_data
 
+    def _speed(self, point_a, point_b):
+        ''' calculates speed between two points
+        '''
+        pass
     
     def _bearing(self, point_a, point_b):
         ''' calculate bearing between two points
