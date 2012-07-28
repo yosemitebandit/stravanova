@@ -35,6 +35,8 @@ parser.add_argument('-d', '--directory', dest='directory', help=('paths to'
         ' your GPX files'))
 parser.add_argument('-o', '--output', dest='output', help=('path to save your'
         ' json file'), required=True)
+parser.add_argument('-p', '--precision', default=5, dest='precision',
+        help=('create point for every N seconds'))
 parser.add_argument('-b', '--binning', action='store_true', default=False, dest='binning', help=('create point'
         ' for every N seconds'))
 arguments = parser.parse_args()
@@ -58,7 +60,8 @@ elif arguments.directory:
         parser.error('the dir you specified is not actually a directory..')
 
 c = stravanova.Condenser(files, binning=arguments.binning)
-data = c.parse()
+data = c.parse(binning=arguments.binning,
+        lat_lon_precision=arguments.precision)
 
 output = open(arguments.output, 'w')
 output.write(json.dumps(data))

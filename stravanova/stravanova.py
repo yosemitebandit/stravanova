@@ -28,10 +28,10 @@ class Condenser():
     ''' saving gpx files as json
     strips out all but latitude, longitude and time
     '''
-    def __init__(self, gpx_paths, binning=False):
+    def __init__(self, gpx_paths):
         self.file_paths = gpx_paths
         self.default_lat_lon_precision = 5
-        self.default_time_binning = binning
+        self.default_time_binning = False
 
     def parse(self, **kwargs):
         lat_lon_precision = kwargs.pop('lat_lon_precision', 
@@ -64,6 +64,7 @@ class Condenser():
                 # calculate speeds
                 if not path:
                     # append the first point
+                    # should do lat_lon rounding at end..
                     path.append([round(lat, lat_lon_precision),
                         round(lon, lat_lon_precision),
                         timestamp,
