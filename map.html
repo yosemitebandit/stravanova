@@ -79,7 +79,6 @@
   <script type="text/javascript" src="js/gmaps.js"></script>
   <script type="text/javascript" src="js/mousetrap.min.js"></script>
   <script type="text/javascript" src="js/player.js"></script>
-  <script type="text/javascript" src="js/controls.js"></script>
 
   <script>
     var map;
@@ -93,30 +92,6 @@
         , zoom: 11
       });
 
-      map.addControl({
-        position: 'top_right',
-        text: 'stravanova',
-        style: {
-          margin: '5px',
-          padding: '1px 6px',
-          border: 'solid 1px #717B87',
-          background: '#fff'
-        },
-        events: {
-          click: function(){
-            fade_toggle_help_overlay();
-          }
-        }
-      });
-
-      $('.close-overlay').click(function() {
-        fade_toggle_help_overlay();
-      });
-
-      // onload, fade out the overlay after a while
-      overlay_hide_timeout = window.setTimeout( function() {
-        $('.help-overlay').fadeOut(800);
-      }, 10000);
 
       // load the ride data
       $.getJSON('ride-files/misc-rides.json', function(data) {
@@ -127,15 +102,8 @@
       });
 
     });
-
-    function fade_toggle_help_overlay() {
-      // clear the auto-hide timer if it hasn't fired
-      window.clearTimeout(overlay_hide_timeout);
-
-      // show/hide the div
-      $('.help-overlay').fadeToggle(100);
-    }
-
-
   </script>
+
+  <!-- putting this down here to make sure map is initialized..lame -->
+  <script type="text/javascript" src="js/controls.js"></script>
 </html>
