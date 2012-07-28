@@ -90,5 +90,31 @@ class TimeBinningTest(unittest.TestCase):
                 'fixtures/caltrain-expedition.gpx']
         self.c = stravanova.Condenser(self.gpx_paths)
 
-    def test_default_time_binning(self):
-        pass
+    def test_bearing_calculation(self):
+        ''' bearing in degrees from two points
+        'true' values from: http://www.movable-type.co.uk/scripts/latlong.html
+        multiple asserts is kinda silly for one test, alas
+        '''
+        p1 = [11.11, -77.77]
+        p2 = [22.22, 33.33]
+        p3 = [-22.22, 33.33]
+        p4 = [-11.11, -77.77]
+        assert 63.2520 == round(self.c._bearing(p1, p2), 3)
+        assert 109.560 == round(self.c._bearing(p1, p3), 3)
+        assert 180.000 == round(self.c._bearing(p1, p4), 3)
+        assert 180.000 == round(self.c._bearing(p2, p3), 3)
+        assert 267.199 == round(self.c._bearing(p2, p4), 3)
+        assert 251.182 == round(self.c._bearing(p3, p4), 3)
+
+    def test_haversine_distance_calculation(self):
+        ''' calculates great circle distance
+        'true' values from: http://www.movable-type.co.uk/scripts/latlong.html
+        should maybe consider law of cosines for small distances:
+        http://gis.stackexchange.com/questions/4906
+        '''
+        p1 = [11.11, -77.77]
+        p2 = [22.22, 33.33]
+        p3 = [37.820726071974306, -122.47897624969482]
+        p4 = [37.82064132128241, -122.47896552085876]
+        assert 11644680 == round(self.c._haversine_distance(p1, p2), -1)
+        assert 9.47 == round(self.c._haversine_distance(p3, p4), 2)

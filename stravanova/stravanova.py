@@ -16,6 +16,7 @@ the JSON format compresses the info at the expense of being non-standard:
 
 '''
 import json
+from math import radians, cos, sin, asin, sqrt, atan2, pi
 import os
 
 import gpxpy
@@ -53,3 +54,41 @@ class Condenser():
                         for p in segment.points]
 
         return parsed_data
+
+    def _bearing(self, point_a, point_b):
+        ''' calculate bearing between two points
+        points are packed (lat, lon)
+        via http://www.movable-type.co.uk/scripts/latlong.html
+        '''
+        point_a = map(radians, point_a)
+        point_b = map(radians, point_b)
+        y = sin(point_b[1] - point_a[1]) * cos(point_b[0])
+        x = (cos(point_a[0]) * sin(point_b[0]) - sin(point_a[0]) *
+                cos(point_b[0]) * cos(point_b[1] - point_a[1]))
+        bearing = atan2(y, x) * 180 / pi
+        # normalize to a compass bearing
+        return (bearing + 360) % 360
+
+    def _haversine_distance(self, point_a, point_b):
+        ''' Haversine implementation to calcalculate the great circle distance
+        between two coordinates (lat, lon)
+        where lat and lon are in decimal degrees
+        return distance in km
+        via http://stackoverflow.com/questions/4913349
+        should maybe consider law of cosines for small distances:
+        http://gis.stackexchange.com/questions/4906
+        '''
+        # unpack
+        lat_a, lon_a = point_a
+        lat_b, lon_b = point_b
+
+        # convert decimal degrees to radians
+        lat_a, lon_a, lat_b, lon_b = map(radians, [lat_a, lon_a, lat_b, lon_b])
+
+        # haversine formula
+        lat_delta = lat_b - lat_a
+        lon_delta = lon_b - lon_a
+        a = sin(lat_delta/2)**2 + cos(lat_a) * cos(lat_b) * sin(lon_delta/2)**2
+
+        # return meters
+        return 1000 * 6371 * 2 * asin(sqrt(a))
