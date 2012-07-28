@@ -4,13 +4,14 @@
 // collection of all instantiated players
 // useful for play/pause operations
 var route_players = []
+var playback_speed = 16;
 
 var Route_Player = function(route, map) {
     this.route = route;
     this.map = map
     this.current_frame = 0;
     this.total_frames = route.length;
-    this.step_time = 100;
+    this.playback_speed = playback_speed;
 
     // draw the first marker
     this.current_marker = this.map.addMarker({
@@ -77,7 +78,7 @@ Route_Player.prototype.animate_frame = function() {
             self.animate_frame();
         }
 
-    }, this.step_time);
+    }, Math.round(1000/this.playback_speed));
 };
 
 Route_Player.prototype.play_pause = function() {
