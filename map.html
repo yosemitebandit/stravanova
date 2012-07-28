@@ -118,7 +118,7 @@
       }, 10000);
 
       // load the ride data
-      $.getJSON('ride-files/short-rides.json', function(data) {
+      $.getJSON('ride-files/misc-rides.json', function(data) {
         _.map(data, function(route) {
           var player = new Route_Player(route, map);
           player.play();
