@@ -23,12 +23,43 @@
         right: 0;
         z-index: 0;
       }
+
+      #help-overlay {
+        position: absolute;
+        top: 53px;
+        right: 0px;
+        width: 320px;
+        background: white;
+        margin: 5px;
+        font-family: Arial, sans-serif;
+        font-size: 13px;
+        padding: 1px 6px;
+        border: solid 1px #717B87;
+        box-shadow: rgba(0, 0, 0, 0.398438) 0px 2px 4px;
+      }
+
+      .close-overlay {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        padding: 5px 10px;
+        cursor: pointer;
+      }
     </style>
 
   </head>
 
   <body>
-    <div id='map'>
+    <div id='map'> </div>
+
+    <div class='help-overlay' id='help-overlay'>
+      <p><code>spacebar</code> to play and pause things</p>
+      <p><code>f/s</code> to change playback speed (currently <code><span class='playback-speed'></span>x</code>)</p>
+      <p>send your <code>.gpx</code> files to <code>stravanova@gmail.com</code> for your very own map</p>
+      <p>visit <a href="http://yosemitebandit.github.com/stravanova">yosemitebandit.github.com/stravanova</a> for more</p>
+      <p>and keep riding.</p>
+
+      <span class='close-overlay'><code>x</code></span>
     </div>
 
   </body>
@@ -48,6 +79,7 @@
   <script type="text/javascript" src="https://raw.github.com/HPNeo/gmaps/master/gmaps.js"></script>
   <script type="text/javascript" src="https://raw.github.com/ccampbell/mousetrap/master/mousetrap.min.js"></script>
   <script type="text/javascript" src="https://raw.github.com/yosemitebandit/stravanova/master/js/player.js"></script>
+  <script type="text/javascript" src="https://raw.github.com/yosemitebandit/stravanova/master/js/controls.js"></script>
 
   <script>
     var map;
@@ -60,7 +92,7 @@
         , zoom: 11
       });
 
-      $.getJSON('../ride-files/matt-rides.json', function(data) {
+      $.getJSON('../ride-files/misc-rides.json', function(data) {
         _.map(data, function(route) {
 
           var player = new Route_Player(route, map);
