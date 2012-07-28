@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-''' stravanova
+''' parse
 command line utility that takes GPX files and stores some of their attributes 
 in a JSON format:
 
-    $ ./stravanova.py --files mountains.gpx valleys.gpx --output rides.json
-    $ ./stravanova.py --directory /secret/climb/routes/ --output climbs.json
+    $ ./parse.py --files mountains.gpx valleys.gpx --output rides.json
+    $ ./parse.py --directory /secret/climb/routes/ --output climbs.json
 
 
 the JSON format compresses the info at the expense of being non-standard:
@@ -22,12 +22,11 @@ the JSON format compresses the info at the expense of being non-standard:
     }
 
 '''
-
 import argparse
 import json
 import os
 
-import gpxpy
+from stravanova import stravanova
 
 parser = argparse.ArgumentParser(description='GPX -> JSON')
 parser.add_argument('-f', '--files', dest='files', nargs='+', help=('paths to'
@@ -56,21 +55,8 @@ elif arguments.directory:
     else:
         parser.error('the dir you specified is not actually a directory..')
 
-routes = {}
-for gpx_file in files:
-    try:
-        gpx = gpxpy.parse(open(gpx_file, 'r'))
-    except TypeError:
-        # not parseable as a gpx file
-        continue
-
-    filename = os.path.basename(gpx_file).split('.')[0]
-
-    for track in gpx.tracks:
-        for segment in track.segments:
-            routes[filename] = [[round(p.latitude, 5), round(p.longitude, 5), 
-                p.time.isoformat()] for p in segment.points]
-
+c = stravanova.Condenser(files)
+data = c.parse()
 
 output = open(arguments.output, 'w')
-output.write(json.dumps(routes))
+output.write(json.dumps(data))
