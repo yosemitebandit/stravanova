@@ -109,9 +109,8 @@
           // create a tracer color for this player
           // for the seed, create a number based on the route name
           // using David Bau's RNG from http://davidbau.com/archives/2010/01/30/random_seeds_coded_hints_and_quintillions.html
-          // (his seeded random function replaces Math.random)
-          var seeded_random = Math.random(name);
-          var color = '#' + palette.generate_hex_color(seeded_random);
+          Math.seedrandom(name);
+          var color = '#' + palette.generate_hex_color(Math.random());
 
           var player = new Route_Player(route, map, color);
           player.play();
