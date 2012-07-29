@@ -79,22 +79,39 @@
   <script type="text/javascript" src="https://raw.github.com/HPNeo/gmaps/master/gmaps.js"></script>
   <script type="text/javascript" src="https://raw.github.com/ccampbell/mousetrap/master/mousetrap.min.js"></script>
   <script type="text/javascript" src="https://raw.github.com/yosemitebandit/stravanova/master/js/player.js"></script>
+  <script type="text/javascript" src="https://raw.github.com/yosemitebandit/stravanova/master/js/palette.js"></script>
+  <script type="text/javascript" src="https://raw.github.com/yosemitebandit/stravanova/master/js/seedrandom.js"></script>
 
   <script>
-    var map;
+    var map, overlay_hide_timeout;
+
+    // create an HSV palette with a saturation and a value
+    // these colors will make up the tracers
+    var palette = new Palette(0.9, 0.95);
 
     $(function() {
       map = new GMaps({
         div: '#map'
-        , lat: 37.90625
-        , lng: -122.45464
-        , zoom: 11
+        , lat: 37.79181
+        , lng: -122.452239
+        , zoom: 14
       });
 
       // start the players
       $.getJSON('../ride-files/matt-rides.json', function(data) {
-        _.map(data, function(route) {
-          var player = new Route_Player(route, map);
+
+        // ride files are keyed by route names
+        // route names contain list of coordinates
+
+        // generate a new route_player for each route
+        _.map(data, function(route, name) {
+          // create a tracer color for this player
+          // to seed color-gen, create a number based on the route name
+          // using David Bau's RNG from http://davidbau.com/archives/2010/01/30/random_seeds_coded_hints_and_quintillions.html
+          Math.seedrandom(name);
+          var color = '#' + palette.generate_hex_color(Math.random());
+
+          var player = new Route_Player(route, map, color);
           player.play();
         });
       });
