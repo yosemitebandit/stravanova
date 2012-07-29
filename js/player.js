@@ -6,9 +6,10 @@
 var route_players = []
 var playback_speed = 16;
 
-var Route_Player = function(route, map) {
+var Route_Player = function(route, map, color) {
     this.route = route;
-    this.map = map
+    this.map = map;
+    this.color = color;
     this.current_frame = 0;
     this.total_frames = route.length;
     this.playback_speed = playback_speed;
@@ -23,7 +24,7 @@ var Route_Player = function(route, map) {
     this.polyline = this.map.drawPolyline({
         path: [[this.route[0][0], this.route[0][1]]
             , [this.route[0][0], this.route[0][1]]]
-        , strokeColor: '#1c86ff'
+        , strokeColor: this.color
         , strokeOpacity: 0.6
     });
 
@@ -42,7 +43,7 @@ Route_Player.prototype.play = function() {
         this.polyline = this.map.drawPolyline({
             path: [[this.route[0][0], this.route[0][1]]
                 , [this.route[0][0], this.route[0][1]]]
-            , strokeColor: '#1c86ff'
+            , strokeColor: this.color
             , strokeOpacity: 0.6
         });
 

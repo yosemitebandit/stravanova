@@ -80,13 +80,15 @@
   <script type="text/javascript" src="js/mousetrap.min.js"></script>
   <script type="text/javascript" src="js/player.js"></script>
   <script type="text/javascript" src="js/palette.js"></script>
+  <script type="text/javascript" src="js/seedrandom.js"></script>
 
   <script>
     var map;
     var overlay_hide_timeout;
 
     // init a new HSV palette with a saturation and a value
-    var palette = new Palette(0.5, 0.95);
+    // these colors will make up the tracers
+    var palette = new Palette(0.9, 0.95);
 
     $(function() {
       map = new GMaps({
@@ -99,8 +101,19 @@
 
       // load the ride data
       $.getJSON('ride-files/matt-rides.json', function(data) {
-        _.map(data, function(route) {
-          var player = new Route_Player(route, map);
+        // ride files are keyed by route names
+        // route names contain list of coordinates
+
+        // generate a new route_player for each route
+        _.map(data, function(route, name) {
+          // create a tracer color for this player
+          // for the seed, create a number based on the route name
+          // using David Bau's RNG from http://davidbau.com/archives/2010/01/30/random_seeds_coded_hints_and_quintillions.html
+          // (his seeded random function replaces Math.random)
+          var seeded_random = Math.random(name);
+          var color = '#' + palette.generate_hex_color(seeded_random);
+
+          var player = new Route_Player(route, map, color);
           player.play();
         });
       });
