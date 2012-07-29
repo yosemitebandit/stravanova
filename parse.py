@@ -62,7 +62,7 @@ elif arguments.directory:
         parser.error('the dir you specified is not actually a directory..')
 
 c = stravanova.Condenser(files)
-data = c.parse(binning=arguments.binning,
+data = c.parse(time_binning=arguments.binning,
         lat_lon_precision=arguments.precision)
 
 output = open(arguments.output, 'w')
