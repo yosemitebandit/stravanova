@@ -87,13 +87,14 @@
 
     // create an HSV palette with a saturation and a value
     // these colors will make up the tracers
-    var palette = new Palette(0.9, 0.95);
+    var palette = new Palette(0.95, 0.95);
 
     $(function() {
       map = new GMaps({
         div: '#map'
         , lat: 37.79181
         , lng: -122.452239
+        , mapType: 'Terrain'
         , zoom: 14
       });
 
