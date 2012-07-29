@@ -1,3 +1,7 @@
+
+This branch contains the maps and ride files from other folks.
+`master` has the scripts used to generate this data.
+
 ### adding new maps
 It's a bit broken, really..
 `master` has the actively developed map and js.
