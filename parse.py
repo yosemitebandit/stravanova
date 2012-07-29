@@ -37,8 +37,8 @@ parser.add_argument('-o', '--output', dest='output', help=('path to save your'
         ' json file'), required=True)
 parser.add_argument('-p', '--precision', type=int, default=5, dest='precision',
         help=('create point for every N seconds'))
-parser.add_argument('-b', '--binning', action='store_true', default=False, dest='binning', help=('create point'
-        ' for every N seconds'))
+parser.add_argument('-b', '--binning', action='store_true', default=False,
+        dest='binning', help=('create point for every second'))
 arguments = parser.parse_args()
 
 # see what we've got
