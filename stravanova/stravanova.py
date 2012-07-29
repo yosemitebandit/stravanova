@@ -64,10 +64,7 @@ class Condenser():
                 if not path:
                     # append the first point
                     # should do lat_lon rounding at end..
-                    path.append([round(lat, lat_lon_precision),
-                        round(lon, lat_lon_precision),
-                        timestamp,
-                        None])
+                    path.append([lat, lon, timestamp, None])
                     continue
                 # grab the previous point
                 previous = path[-1]
@@ -76,10 +73,7 @@ class Condenser():
                     continue
 
                 # inject the calculated speed
-                path.append([round(lat, lat_lon_precision),
-                    round(lon, lat_lon_precision),
-                    timestamp,
-                    speed])
+                path.append([lat, lon, timestamp, None])
 
             if time_binning:
                 # create a point for every N seconds
@@ -114,13 +108,21 @@ class Condenser():
                         [binned_path[-1][0], binned_path[-1][1]], bearing,
                         distance))
 
-                # strip all but lat/lon info
-                parsed_data[filename] = [[p[0], p[1]] for p in binned_path]
+                # strip all but lat/lon info and round the coordinates
+                parsed_data[filename] = [
+                    [round(p[0], lat_lon_precision),
+                    round(p[1], lat_lon_precision)]
+                    for p in binned_path
+                ]
 
             else:
                 # not time-binning
-                # strip all but lat/lon info
-                parsed_data[filename] = [[p[0], p[1]] for p in path]
+                # strip all but lat/lon info and round the coordinates
+                parsed_data[filename] = [
+                    [round(p[0], lat_lon_precision),
+                    round(p[1], lat_lon_precision)]
+                    for p in path
+                ]
 
         return parsed_data
 
