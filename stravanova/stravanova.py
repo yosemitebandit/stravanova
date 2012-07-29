@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
 ''' stravanova
 taking GPX files and storing some of their attributes as JSON
-the JSON format compresses the info at the expense of being non-standard:
-[lat, lon, timestamp (epoch, UTC), speed (m/s)]
+the JSON format compresses the info to lat/lon pairs (in decimal degrees)
 
     routes = {
         'cow-watchin': [
-            [123.456, 789.012, 1343461324, 4.523]
-            , [123.467, 789.023, 1343461324, 2.160]
+            [123.456, 789.012]
+            , [123.467, 789.023]
         ]
         , 'quadruple-century': [
-            [345.456, 78.012, 1343464324, 4.523]
-            , [345.467, 78.023, 1343463324, 2.160]
+            [345.456, 78.012]
+            , [345.467, 78.023]
         ]
     }
 
@@ -120,6 +119,7 @@ class Condenser():
 
             else:
                 # not time-binning
+                # strip all but lat/lon info
                 parsed_data[filename] = [[p[0], p[1]] for p in path]
 
         return parsed_data
