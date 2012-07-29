@@ -7,11 +7,8 @@ time binning
 point limitation
 '''
 import decimal
-import os
-import time
 import unittest
 
-import gpxpy
 import stravanova
 
 class ParsingTest(unittest.TestCase):
