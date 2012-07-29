@@ -44,6 +44,14 @@ The parser above can create datasets like this.
 Not to mention that each route player has its own timer so there's no synching.)
 
 
+### the script
+`parse.py` is a simple script that uses the python module and plows through `.gpx` files.
+Check it's source for a how-to or do:
+
+    $ /path/to/venv/bin/activate
+    (venv)$ python parse.py --help
+
+
 ### the site
 `master` has a template `map.html` file and all of the associated js.
 `gh-pages` has the info for http://yosemitebandit.github.com/stravanova -- each map is built from that template.
@@ -52,6 +60,7 @@ Each map's js is hotlinked to master.
 
 ### testing the parser
 
+    $ /path/to/venv/bin/activate
     (venv) $ cd stravanova
     (venv) $ nosetests
 
