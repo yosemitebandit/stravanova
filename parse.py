@@ -4,8 +4,10 @@
 command line utility that takes GPX files and stores some of their attributes 
 in a JSON format:
 
-    $ ./parse.py --files mountains.gpx valleys.gpx --output rides.json
-    $ ./parse.py --directory /secret/climb/routes/ --output climbs.json
+    (venv) $ ./parse.py --files mountains.gpx valleys.gpx --output rides.json
+    (venv) $ ./parse.py --directory /secret/climb/routes/ --output climbs.json
+    (venv) $ ./parse.py -d ~/climbs/ -o climbs.json --binning
+    (venv) $ ./parse.py -d ~/climbs/ -o climbs.json --precision 7
 
 
 the JSON format compresses the info at the expense of being non-standard:
@@ -36,7 +38,7 @@ parser.add_argument('-d', '--directory', dest='directory', help=('paths to'
 parser.add_argument('-o', '--output', dest='output', help=('path to save your'
         ' json file'), required=True)
 parser.add_argument('-p', '--precision', type=int, default=5, dest='precision',
-        help=('create point for every N seconds'))
+        help=('truncate lat/lon values to N decimal places'))
 parser.add_argument('-b', '--binning', action='store_true', default=False,
         dest='binning', help=('create point for every second'))
 arguments = parser.parse_args()
