@@ -79,10 +79,14 @@
   <script type="text/javascript" src="js/gmaps.js"></script>
   <script type="text/javascript" src="js/mousetrap.min.js"></script>
   <script type="text/javascript" src="js/player.js"></script>
+  <script type="text/javascript" src="js/palette.js"></script>
 
   <script>
     var map;
     var overlay_hide_timeout;
+
+    // init a new HSV palette with a saturation and a value
+    var palette = new Palette(0.5, 0.95);
 
     $(function() {
       map = new GMaps({
