@@ -24,11 +24,8 @@
         z-index: 0;
       }
 
-      #help-overlay {
+      .custom-overlay {
         position: absolute;
-        top: 53px;
-        right: 0px;
-        width: 320px;
         background: white;
         margin: 5px;
         font-family: Arial, sans-serif;
@@ -36,6 +33,21 @@
         padding: 1px 6px;
         border: solid 1px #717B87;
         box-shadow: rgba(0, 0, 0, 0.398438) 0px 2px 4px;
+      }
+
+      #help-overlay {
+        top: 53px;
+        right: 0px;
+        width: 320px;
+      }
+
+      #loading-overlay {
+        left: 85px;
+        top: 15px;
+      }
+
+      #loading-overlay p {
+        padding: 2px 0 2px 0;
       }
 
       .close-overlay {
@@ -52,7 +64,11 @@
   <body>
     <div id='map'> </div>
 
-    <div class='help-overlay' id='help-overlay'>
+    <div class='custom-overlay' id='loading-overlay'>
+      <p>loading, one sec..</p>
+    </div>
+
+    <div class='custom-overlay' id='help-overlay'>
       <p><code>spacebar</code> to play and pause things</p>
       <p><code>f/s</code> to change playback speed (currently <code><span class='playback-speed'></span>x</code>)</p>
       <p>send your <code>.gpx</code> files to <code>stravanova@gmail.com</code> for your very own map</p>
@@ -103,6 +119,12 @@
       $.getJSON('ride-files/matt-rides.json', function(data) {
         // ride files are keyed by route names
         // route names contain list of coordinates
+
+        // hide the loading overlay
+        // I can never get $.delay to work :/
+        window.setTimeout(function() {
+          $('#loading-overlay').fadeOut(800);
+        }, 1000);
 
         // generate a new route_player for each route
         _.map(data, function(route, name) {

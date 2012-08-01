@@ -66,7 +66,7 @@ $(function() {
 
     // onload, fade out the overlay after a while
     overlay_hide_timeout = window.setTimeout( function() {
-        $('.help-overlay').fadeOut(800);
+        $('#help-overlay').fadeOut(800);
     }, 10000);
 
 });
@@ -76,5 +76,5 @@ function fade_toggle_help_overlay() {
     window.clearTimeout(overlay_hide_timeout);
 
     // show/hide the div
-    $('.help-overlay').fadeToggle(100);
+    $('#help-overlay').fadeToggle(100);
 }
