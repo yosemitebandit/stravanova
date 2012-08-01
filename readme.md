@@ -12,21 +12,23 @@ These pairs get dumped in a list; the list is identified by the `.gpx` filename.
     ]
 
 The js route player can handle this just fine, but the route player is kind of dumb.
-It just blithely steps through these coordinates and animates the markers.
-It does not really have any sense of *when* these coordinates are relevant.
-The player's blind march assumes that each point was recorded N seconds apart.
-In the raw `.gpx` file, this is obviously not necessarily the case.
-Strava will try to record coordinates every four seconds but it might fail for lack of GPS reception or something else.
+It just blithely steps through these coordinates and animates the markers
+and does not really have any sense of *when* these coordinates are relevant.
+The route player's blind march assumes that each point was recorded N seconds apart
+but in the raw `.gpx` file, this is not necessarily the case.
+Strava will try to record coordinates every four seconds 
+but it might fail for lack of GPS reception or something else.
 
 So the `stravanova` module has a way to "bin" these coordinates.
-Essentially it's a way to interpolate points and create a dataset that *does* have measurements spaced exactly N seconds apart.
-(Currently N is fixed at 1 because other larger values caused peculiar offsets -- maybe this will be parameterized one day.)
+Essentially it's a way of interpolating points and creating a dataset that *does* have measurements spaced exactly N seconds apart.
+(Currently N is fixed at 1 because other larger values caused peculiar spatial offsets --
+maybe this value will be parameterized one day.)
 How does it do this binning?
 It linearly interpolates coordinates by using the bearing and average speed between two known measurements.
-So if we want to know where we were on the path between two points one second after leaving the origin point
+So if we want to know where we were on the path between two points one second after leaving the origin point,
 we can first take that one second and multiply it by the speed.
 This gives a circle from the origin -- our interpolated point lies somewhere on that circle.
-If we know the bearing (an angle) we can find the exact point.
+If we know the bearing (an angle) we can find the exact point on that circle.
 
 These calculations are made using formulae from [this excellent site](http://www.movable-type.co.uk/scripts/latlong.html).
 Distances between coordinates are often quite small in these files
@@ -46,7 +48,7 @@ Not to mention that each route player has its own timer so there's no synching.)
 
 ### the script
 `parse.py` is a simple script that uses the python module and plows through `.gpx` files.
-Check it's source for a how-to or do:
+Check it's source for a how-to, or try:
 
     $ /path/to/venv/bin/activate
     (venv)$ python parse.py --help
@@ -55,7 +57,7 @@ Check it's source for a how-to or do:
 ### the site
 `master` has a template `map.html` file and all of the associated js.
 `gh-pages` has the info for http://yosemitebandit.github.com/stravanova -- each map is built from that template.
-Each map's js is hotlinked to master.
+Each map's js is hotlinked to the js in `master`.
 
 
 ### testing the parser
