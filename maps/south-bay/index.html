@@ -1,0 +1,160 @@
+<!doctype html>
+<html>
+  <head>
+    <title>stravanova - South Bay</title>
+
+    <!-- HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <style>
+
+      body{
+        font-family: 'Droid Sans', 'Helvetica', Arial, sans-serif;
+        margin:5px;
+      }
+
+      #map{
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 0;
+      }
+
+      .custom-overlay {
+        position: absolute;
+        background: white;
+        margin: 5px;
+        font-family: Arial, sans-serif;
+        font-size: 13px;
+        padding: 1px 6px;
+        border: solid 1px #717B87;
+        box-shadow: rgba(0, 0, 0, 0.398438) 0px 2px 4px;
+      }
+
+      #help-overlay {
+        top: 53px;
+        right: 0px;
+        width: 320px;
+      }
+
+      #loading-overlay {
+        left: 85px;
+        top: 15px;
+      }
+
+      .close-overlay {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        padding: 5px 10px;
+        cursor: pointer;
+      }
+    </style>
+
+  </head>
+
+  <body>
+    <div id='map'> </div>
+
+    <div class='custom-overlay' id='loading-overlay'>
+      <p>loading, one sec..</p>
+    </div>
+
+    <div class='custom-overlay' id='help-overlay'>
+      <p><code>spacebar</code> to play and pause things</p>
+      <p><code>f/s</code> to change playback speed (currently <code><span class='playback-speed'></span>x</code>)</p>
+      <p>send your <code>.gpx</code> files to <code>stravanova@gmail.com</code> for your very own map</p>
+      <p>visit <a href="http://yosemitebandit.github.com/stravanova">yosemitebandit.github.com/stravanova</a> for more</p>
+      <p>and keep riding.</p>
+
+      <span class='close-overlay'><code>x</code></span>
+    </div>
+
+  </body>
+
+  <!-- jquery from cdn with local fallback -->
+  <script src='//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>
+  <script>
+    if (typeof jQuery == 'undefined') {
+      document.write(unescape("%3Cscript src='js/jquery.min.js' type='text/javascript'%3E%3C/script%3E"));
+    }
+  </script>
+
+  <!-- underscore sans fallback; should use require.js -->
+  <script src='//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.3.3/underscore-min.js'></script>
+
+  <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+  <script type="text/javascript" src="https://raw.github.com/HPNeo/gmaps/master/gmaps.js"></script>
+  <script type="text/javascript" src="https://raw.github.com/ccampbell/mousetrap/master/mousetrap.min.js"></script>
+  <script type="text/javascript" src="https://raw.github.com/yosemitebandit/stravanova/master/js/player.js"></script>
+  <script type="text/javascript" src="https://raw.github.com/yosemitebandit/stravanova/master/js/palette.js"></script>
+  <script type="text/javascript" src="https://raw.github.com/yosemitebandit/stravanova/master/js/seedrandom.js"></script>
+
+  <script>
+    var map, overlay_hide_timeout;
+
+    // create an HSV palette with a saturation and a value
+    // these colors will make up the tracers
+    var palette = new Palette(0.95, 0.95);
+
+    $(function() {
+      map = new GMaps({
+        div: '#map'
+        , lat: 37.39955
+        , lng: -122.10994
+        , mapType: 'Terrain'
+        , zoom: 14
+      });
+
+      // start the players
+      $.getJSON('../ride-files/south-bay.json', function(data) {
+
+        // ride files are keyed by route names
+        // route names contain list of coordinates
+
+        // hide the loading overlay
+        // I can never get $.delay to work :/
+        window.setTimeout(function() {
+          $('#loading-overlay').fadeOut(800);
+        }, 1000);
+
+        // generate a new route_player for each route
+        _.map(data, function(route, name) {
+          // create a tracer color for this player
+          // to seed color-gen, create a number based on the route name
+          // using David Bau's RNG from http://davidbau.com/archives/2010/01/30/random_seeds_coded_hints_and_quintillions.html
+          //Math.seedrandom(name);
+          //var color = '#' + palette.generate_hex_color(Math.random());
+
+          // monochrome by request
+          var color = '#007396'
+
+          var player = new Route_Player(route, map, color);
+          player.play();
+        });
+      });
+
+    });
+
+  </script>
+
+  <!-- putting this down here to make sure map is initialized..lame -->
+  <script type="text/javascript" src="https://raw.github.com/yosemitebandit/stravanova/master/js/controls.js"></script>
+
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-33722635-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+</html>
