@@ -15,8 +15,8 @@ $(function() {
     // speed controls
     Mousetrap.bind('f', function() {
         playback_speed = playback_speed * 2;
-        if (playback_speed >= 128) {
-            playback_speed = 128;
+        if (playback_speed >= 256) {
+            playback_speed = 256;
         }
         $('.playback-speed').html(playback_speed);
 
