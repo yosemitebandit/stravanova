@@ -97,4 +97,9 @@ Route_Player.prototype.stop = function() {
     window.clearTimeout(this.timeout_id);
     this.current_frame = 0;
     this.is_finished = true;
-}
+};
+
+Route_Player.prototype.set_path_color = function(color) {
+    this.polyline.setOptions({strokeColor: color});
+    console.log(color);
+};
