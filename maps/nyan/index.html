@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>stravanova - nyan</title>
+    <title>stravanova - nyanyanyanyanyany</title>
 
     <!-- HTML5 shim, for IE6-8 support of HTML elements -->
     <!--[if lt IE 9]>
@@ -132,6 +132,19 @@
 
           var player = new Route_Player(route, map, color);
           player.play();
+
+          var color_swap = function() {
+            window.setTimeout(function() {
+              var color = '#' + palette.generate_hex_color(Math.random());
+              player.set_path_color(color);
+
+              // again!
+              color_swap();
+            }, 425);
+          };
+
+          color_swap();
+
         });
       });
 
