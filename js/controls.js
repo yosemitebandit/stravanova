@@ -45,7 +45,7 @@ $(function() {
     // add the top-right button
     map.addControl({
         position: 'top_right',
-        text: 'stravanova',
+        content: 'stravanova',
         style: {
             margin: '5px',
             padding: '1px 6px',
