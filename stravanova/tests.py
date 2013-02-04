@@ -19,6 +19,13 @@ class ParsingTest(unittest.TestCase):
                 'fixtures/caltrain-expedition.gpx']
         self.c = stravanova.Condenser(self.gpx_paths)
 
+    def test_binning_value_param(self):
+        ''' accept a value for the "width" of the bin
+        default to one second
+        '''
+        # hm, not actually sure how to verify..
+        pass
+
     def test_parsing_result_type(self):
         result = self.c.parse()
         assert type(result) is dict

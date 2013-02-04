@@ -6,10 +6,13 @@
 var route_players = []
 var playback_speed = 16;
 
-var Route_Player = function(route, map, color) {
+var Route_Player = function(route, map, color, frame_duration) {
     this.route = route;
     this.map = map;
     this.color = color;
+    // milliseconds to hold a frame
+    this.frame_duration = frame_duration
+
     this.current_frame = 0;
     this.total_frames = route.length;
     this.playback_speed = playback_speed;
@@ -79,7 +82,7 @@ Route_Player.prototype.animate_frame = function() {
             self.animate_frame();
         }
 
-    }, Math.round(1000/this.playback_speed));
+    }, Math.round(this.frame_duration/this.playback_speed));
 };
 
 Route_Player.prototype.play_pause = function() {

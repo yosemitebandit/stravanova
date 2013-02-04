@@ -30,7 +30,7 @@ class Condenser():
     def __init__(self, gpx_paths):
         self.file_paths = gpx_paths
         self.default_lat_lon_precision = 5
-        self.default_time_binning = False
+        self.default_time_binning = 1
 
     def parse(self, **kwargs):
         lat_lon_precision = kwargs.pop('lat_lon_precision', 
@@ -77,7 +77,7 @@ class Condenser():
 
             if time_binning:
                 # create a point for every N seconds
-                N = 1
+                N = time_binning
                 # initialize the path with the first point
                 binned_path = [[path[0][0], path[0][1]]]
                 # array of all timestamps
