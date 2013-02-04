@@ -130,7 +130,7 @@
           Math.seedrandom(name);
           var color = '#' + palette.generate_hex_color(Math.random());
 
-          var player = new Route_Player(route, map, color);
+          var player = new Route_Player(route, map, color, 100);
           player.play();
         });
       });
