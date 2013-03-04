@@ -6,7 +6,7 @@ in a JSON format:
 
     (venv) $ ./parse.py --files mountains.gpx valleys.gpx --output rides.json
     (venv) $ ./parse.py --directory /secret/climb/routes/ --output climbs.json
-    (venv) $ ./parse.py -d ~/climbs/ -o climbs.json --binning
+    (venv) $ ./parse.py -d ~/climbs/ -o climbs.json --binning 1
     (venv) $ ./parse.py -d ~/climbs/ -o climbs.json --precision 7
 
 
